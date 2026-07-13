@@ -1,5 +1,7 @@
 # *This project has been created as part of the 42 curriculum by mchanlia, lchiche*
 
+![cbox_with_sphere](cbox_with_sphere.jpg)
+
 # <span style="color:lime">MiniRT</span>
 
 ### <span style="color:mediumseagreen">**Short Description**</span> : 
