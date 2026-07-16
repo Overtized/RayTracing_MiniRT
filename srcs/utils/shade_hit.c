@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   shade_hit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchanlia <mchanlia@42.student.fr>          +#+  +:+       +#+        */
+/*   By: mchanlia <mchanlia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/18 10:44:38 by mchanlia          #+#    #+#             */
-/*   Updated: 2026/03/28 15:43:13 by mchanlia         ###   ########.fr       */
+/*   Updated: 2026/07/16 06:00:25 by mchanlia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-static bool	is_shadowed(t_scene *scene, t_point *point, t_light *current_light)
+static bool	is_shadowed(t_scene *scene, t_point *point, t_light *current_light) // math
 {
 	t_ray	test_ray;
 	t_point	dir;
@@ -55,20 +55,20 @@ t_color	shade_hit(t_scene *scene, t_comps *comps, int ref_lim)
 	colors[0] = comps->obj->materia.intensity;
 	if (comps->obj->has_pattern)
 		colors[0] = get_patt_obj(&comps->obj->pattern,
-				&comps->over_p, comps->obj);
-	colors[0] = comp_amb(scene, &colors[0], &comps->obj->materia);
+				&comps->over_p, comps->obj); // check for pattern on object (stripes for example)
+	colors[0] = comp_amb(scene, &colors[0], &comps->obj->materia); // compute ambiant light
 	current_light = scene->light;
 	while (current_light)
 	{
-		if (!is_shadowed(scene, &comps->over_p, current_light))
+		if (!is_shadowed(scene, &comps->over_p, current_light)) // is the object positioned in a shadowed area ? if so it will have consequences
 			colors[0] = sum_two_colors (colors[0],
 					color_point(current_light, comps, &colors[0]));
 		current_light = current_light->next;
 	}
-	colors[1] = reflected_color(scene, comps, ref_lim - 1);
-	refract_c(scene, comps, ref_lim - 1, &colors[2]);
+	colors[1] = reflected_color(scene, comps, ref_lim - 1); // reflected
+	refract_c(scene, comps, ref_lim - 1, &colors[2]); // refracted
 	if (comps->obj->materia.reflective > 0.0
 		&& comps->obj->materia.transparency > 0.0)
-		return (compute_reflectance(colors, comps));
-	return (sum_two_colors(colors[0], colors[1]));
+		return (compute_reflectance(colors, comps)); // reflectance value
+	return (sum_two_colors(colors[0], colors[1])); // final value
 }

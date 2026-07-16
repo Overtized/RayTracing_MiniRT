@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   verify_all.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lchiche <lchiche@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mchanlia <mchanlia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 15:55:44 by lchiche           #+#    #+#             */
-/*   Updated: 2026/03/03 01:07:15 by lchiche          ###   ########.fr       */
+/*   Updated: 2026/07/16 05:40:00 by mchanlia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ static void	tests_intro(char *map_name)
 
 bool	verify_all(int nb_arg, char **args)
 {
-	if (nb_arg != 2)
+	if (nb_arg != 2) // basic ac check
 		return (write_err("\n[program_name] [path_to_map.rt]\n"));
 	tests_intro(args[1]);
-	if (check_map_rt(args[1]))
+	if (check_map_rt(args[1])) // file extension check
 		return (write_err("Error\n\tInvalid map name !\n"));
-	if (verify_map(args[1]))
+	if (verify_map(args[1])) // map parsing check
 		return (1);
 	write_message(1, "Success\n\tMap is valid !\n", P_GREEN);
 	return (false);

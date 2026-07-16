@@ -6,7 +6,7 @@
 /*   By: mchanlia <mchanlia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 16:27:37 by mchanlia          #+#    #+#             */
-/*   Updated: 2026/04/01 13:41:05 by mchanlia         ###   ########.fr       */
+/*   Updated: 2026/07/16 06:01:55 by mchanlia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ t_it	*intersect(t_object *obj, t_ray *world_ray, bool *error)
 	t_it	*it_list;
 
 	it_list = NULL;
-	while (obj)
+	while (obj) // loop over object list and register hits based on object type, maths
 	{
 		if (obj->type == OBJ_PLANE)
 		{
@@ -110,6 +110,6 @@ t_it	*intersect(t_object *obj, t_ray *world_ray, bool *error)
 		}
 		obj = obj->next;
 	}
-	sort_inter_list(&it_list);
+	sort_inter_list(&it_list); // sort the intersected points to get a list (will be check afterwards for lowest hit computation)
 	return (it_list);
 }

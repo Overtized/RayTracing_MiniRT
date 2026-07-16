@@ -6,7 +6,7 @@
 /*   By: mchanlia <mchanlia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:36:49 by lchiche           #+#    #+#             */
-/*   Updated: 2026/04/01 14:46:01 by mchanlia         ###   ########.fr       */
+/*   Updated: 2026/07/16 05:56:22 by mchanlia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,27 +62,27 @@ static bool	fill_image(t_data *img, t_scene *scene)
 	t_color	color;
 
 	y = -1;
-	ray = create_ray(make_point(0, 0, 0, GREEN), make_vector(0, 0, 0, GREEN));
-	while (++y < WINDOW_Y)
+	ray = create_ray(make_point(0, 0, 0, GREEN), make_vector(0, 0, 0, GREEN)); // make an initial ray vector
+	while (++y < WINDOW_Y) // cover the whole image from top to bottom, left to right
 	{
 		x = -1;
 		while (++x < WINDOW_X)
 		{
-			reset_color(&color);
+			reset_color(&color); // color ressetting for garbage values
 			if (x == 0 && y % 10 == 0)
 				printf("Calcul de la ligne Y : %d / %d\n", y, WINDOW_Y);
-			camera_ray(scene->camera, x, y, &ray);
+			camera_ray(scene->camera, x, y, &ray); // point the ray in the camera facing direction
 			if (ray.error)
 				return (write_err("ray error"), false);
-			if (!color_at(scene, &ray, &color))
+			if (!color_at(scene, &ray, &color)) // color the pixel based on the ray reaction or non reaction to things in its way (things get interesting here)
 				return (write_err("color at function failure\n"), false);
-			put_one_pixel(img, x, y, color_to_hex(color));
+			put_one_pixel(img, x, y, color_to_hex(color)); // put the pixel out on display
 		}
 	}
 	return (true);
 }
 
-bool	create_image(t_data *img, t_vars *vars, t_scene *scene)
+bool	create_image(t_data *img, t_vars *vars, t_scene *scene) // classic minilibx pipeline make a new image get its address value and put it to display
 {
 	if (!scene || !scene->camera)
 		return (write_err("Error: No camera found in scene.\n"), false);
@@ -92,7 +92,7 @@ bool	create_image(t_data *img, t_vars *vars, t_scene *scene)
 	img->addr = mlx_get_data_addr(img->img, &img->bpp, &img->ll, &img->endian);
 	if (!img || !img->addr)
 		return (write_err("get_data_addr failure\n"), false);
-	if (!fill_image(img, scene))
+	if (!fill_image(img, scene)) // this is where magic happens
 		return (write_err("fill image failure\n"), false);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->img.img, 0, 0);
 	return (true);

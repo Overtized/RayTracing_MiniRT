@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_min.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maxence <maxence@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mchanlia <mchanlia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 15:57:30 by lchiche           #+#    #+#             */
-/*   Updated: 2026/03/29 19:39:05 by maxence          ###   ########.fr       */
+/*   Updated: 2026/07/16 05:46:34 by mchanlia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,26 @@ bool	fill_plane(t_scene *scene, char **input, size_t obj_idx)
 	t_object	*new_obj;
 	t_plane		*new_plane;
 
-	new_plane = ft_calloc(1, sizeof(t_plane));
+	new_plane = ft_calloc(1, sizeof(t_plane)); // instantiate an object plane node
 	if (!new_plane)
 		return (ft_free_double_char(input), true);
-	if (fill_vec3(&new_plane->pos.p, input[1]))
+	if (fill_vec3(&new_plane->pos.p, input[1])) // fill its position verticies
 		return (free(new_plane), ft_free_double_char(input), true);
-	else if (fill_vec3(&new_plane->orientation.p, input[2]))
+	else if (fill_vec3(&new_plane->orientation.p, input[2])) // fill its orientation values
 		return (free(new_plane), ft_free_double_char(input), true);
-	else if (fill_rgb(&new_plane->color, input[3]))
+	else if (fill_rgb(&new_plane->color, input[3])) // fill its color value
 		return (free(new_plane), ft_free_double_char(input), true);
 	ft_free_double_char(input);
-	new_plane->transform = identity_matrix();
-	new_plane->normal = normalize_vector(new_plane->orientation);
-	new_obj = new_object(OBJ_PLANE, new_plane, obj_idx);
+	new_plane->transform = identity_matrix(); // store object identity matrix
+	new_plane->normal = normalize_vector(new_plane->orientation); // get the normal at object
+	new_obj = new_object(OBJ_PLANE, new_plane, obj_idx); // instantiate object
 	if (!new_obj)
 		return (free(new_plane), true);
-	new_obj->has_pattern = false;
-	new_obj->inv_m = get_inv_transfo_pl(new_obj);
+	new_obj->has_pattern = false; // basic init
+	new_obj->inv_m = get_inv_transfo_pl(new_obj); // get inversion transformation
 	new_obj->trans_inv_m = cpy_matrix(&new_obj->inv_m);
-	transpose_matrix(&new_obj->trans_inv_m);
-	add_object(&scene->objects, new_obj);
+	transpose_matrix(&new_obj->trans_inv_m); // get the transformation of the inverse of the matrix
+	add_object(&scene->objects, new_obj); // add object to the list
 	return (false);
 }
 
